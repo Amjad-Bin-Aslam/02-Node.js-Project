@@ -19,7 +19,11 @@ router.post('/signin', async (req , res) => {
         })
     }
 
-}) 
+});
+
+router.get("/logout" , (req , res) => {
+    res.clearCookie("token").redirect("/");
+})
 
 router.get('/signup' , (req , res) => {
     res.render('signup');
