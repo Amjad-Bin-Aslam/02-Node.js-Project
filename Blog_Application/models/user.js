@@ -50,9 +50,9 @@ userSchema.pre("save" , function (next) {
 });
 
 // virtual function.... it will be used when the user signin it will match the hashed password and email
-userSchema.static("matchPassword" , function (email , password) {
-    const user = this.findOne({ email });
-    if(!user) return false;
+userSchema.static("matchPassword" , async function (email , password) {
+    const user = await this.findOne({ email });
+    if(!user) throw new Error('user not found');
 
     const salt = user.salt;
     const hashedPassword = user.password;
@@ -61,8 +61,10 @@ userSchema.static("matchPassword" , function (email , password) {
     .update(password)
     .digest("hex");
 
-    return hashedPassword === userProvidedHash;
-});l
+    if(hashedPassword !== userProvidedHash ) throw new Error("Incorrect password")
+ 
+    return user;
+});
 
 
 const User = model("user" , userSchema);

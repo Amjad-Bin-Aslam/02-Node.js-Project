@@ -9,9 +9,13 @@ router.get('/signin' , (req , res) => {
 
 router.post('/signin', async (req , res) => {
     const { email , password } = req.body;
-    
+    console.log(email , password)
+    const user = await User.matchPassword(email , password);
 
-})
+    console.log("User" , user);
+    return res.redirect("/");
+
+}) 
 
 router.get('/signup' , (req , res) => {
     res.render('signup');
